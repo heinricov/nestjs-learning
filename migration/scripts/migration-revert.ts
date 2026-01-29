@@ -1,0 +1,93 @@
+import 'dotenv/config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { dataSourceOptions } from '../src/database/typeormConfig';
+import { join } from 'path';
+import { mkdir, readdir, stat } from 'fs/promises';
+
+const rootSrc = join(process.cwd(), 'src');
+const migrationsDir = join(rootSrc, 'database', 'migrations');
+
+/**
+ * Mengecek secara rekursif apakah ada file *.entity.ts di dalam folder src.
+ */
+const hasEntity = async (dir: string): Promise<boolean> => {
+  try {
+    const names = await readdir(dir);
+    for (const n of names) {
+      const p = join(dir, n);
+      const s = await stat(p);
+      if (s.isDirectory()) {
+        if (await hasEntity(p)) return true;
+      } else if (n.endsWith('.entity.ts')) {
+        return true;
+      }
+    }
+    return false;
+  } catch {
+    return false;
+  }
+};
+
+const run = async (): Promise<void> => {
+  if (!(await hasEntity(rootSrc))) {
+    console.log('FIle Entity Not Exixting');
+    return;
+  }
+
+  await mkdir(migrationsDir, { recursive: true });
+  const isOptions = (v: unknown): v is DataSourceOptions =>
+    !!v &&
+    typeof v === 'object' &&
+    'type' in v &&
+    'entities' in v &&
+    'migrations' in v;
+  const safeOptions: DataSourceOptions = isOptions(dataSourceOptions)
+    ? dataSourceOptions
+    : {
+        type: 'postgres',
+        host: process.env.DB_HOST ?? 'localhost',
+        port: Number(process.env.DB_PORT ?? 5432),
+        username: process.env.DB_USERNAME ?? 'postgres',
+        password: process.env.DB_PASSWORD ?? 'postgres',
+        database: process.env.DB_NAME ?? 'mydatabase',
+        entities: [join(rootSrc, '**', '*.entity.{ts,js}')],
+        migrations: [join(rootSrc, 'database', 'migrations', '*.{ts,js}')],
+        synchronize: false,
+      };
+  const ds = new DataSource({
+    ...safeOptions,
+    logging: ['error', 'warn', 'migration'],
+  });
+  await ds.initialize();
+
+  try {
+    await ds.undoLastMigration({ transaction: 'all' });
+  } catch (err: unknown) {
+    const msg =
+      err && typeof err === 'object' && 'message' in err
+        ? String((err as { message: string }).message)
+        : '';
+    const isNoTable =
+      msg.includes('migrations') &&
+      (msg.includes('does not exist') ||
+        msg.includes('not found') ||
+        msg.includes('No migrations were found'));
+    if (isNoTable) {
+      await ds.dropDatabase();
+    } else {
+      throw err;
+    }
+  } finally {
+    await ds.destroy();
+  }
+};
+
+run().catch((error) => {
+  const err = error as unknown;
+  if (err && typeof err === 'object' && 'message' in err) {
+    console.error((err as { message: string }).message);
+  } else {
+    console.error('Unknown error');
+  }
+  process.exit(1);
+});
