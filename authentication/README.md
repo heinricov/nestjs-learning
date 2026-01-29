@@ -20,6 +20,10 @@ npm i class-validator class-transformer
 
 Buat `.env` di root project:
 
+```bash
+touch .env
+```
+
 ```env
 # Database
 DB_HOST=localhost
@@ -38,6 +42,11 @@ BCRYPT_SALT_ROUNDS=10
 ## Konfigurasi TypeORM
 
 Buat `src/database/typeormConfig.ts` mengikuti pola yang sudah digunakan di proyek lain:
+
+```bash
+mkdir -p src/database
+touch src/database/typeormConfig.ts
+```
 
 ```ts
 import 'dotenv/config';
