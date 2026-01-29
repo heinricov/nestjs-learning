@@ -14,6 +14,7 @@ Dokumentasi ini menjelaskan langkah-langkah membuat fitur Authentication berbasi
 ```bash
 npm i @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
 npm i class-validator class-transformer
+npm i -D @types/bcrypt
 ```
 
 ## Variabel Lingkungan
