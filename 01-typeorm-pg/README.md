@@ -29,17 +29,13 @@ npm install -D @types/node
 ```bash
 mkdir src/database
 touch src/database/typeormConfig.ts
+touch .env
 ```
 
 - Konfigurasi TypeORM berbasis environment (PostgreSQL).
 - autoLoadEntities aktif, siap memuat entity secara otomatis.
 - mendukung pola `entities` dan `migrations`.
 - Ditambahkan: [`src/.env`](/nestjs-typeorm-pg/src/.env)
-
-```bash
-touch .env
-```
-
 - Variabel: PORT, DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_SYNCHRONIZE.
 - Diperbarui: [`src/app.module.ts`](/nestjs-typeorm-pg/src/app.module.ts)
   - Menambahkan `TypeOrmModule.forRoot(typeOrmConfig)`.
