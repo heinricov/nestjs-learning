@@ -22,48 +22,14 @@ npm install dotenv
 touch .env
 ```
 
-4. isi file `.env` dengan variabel environment yang dibutuhkan, misalnya:
+4. isi file `.env` dengan variabel environment yang dibutuhkan, misalnya anda bisa lihat di dalama file [.env](.env)
 
-```bash
-PORT=3000
-```
+5. perbaharui file `main.ts` dengan menggunakan variabel environment seperti yang ada didalam file [src/main.ts](src/main.ts)
 
-5. import dotenv di file `main.ts`
-
-```typescript
-import dotenv from 'dotenv';
-dotenv.config();
-```
-
-6. gunakan variabel environment di file `main.ts`
-
-```typescript
-const port = parseInt(process.env.PORT, 10) || 3000;
-```
-
-7. buat file `vercel.json` di root project, isi dengan konfigurasi berikut:
+6. buat file `vercel.json` di root project, isi dengan konfigurasi seperti yang ada didalam file [vercel.json](vercel.json)
 
 ```bash
 touch vercel.json
-```
-
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "src/main.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "src/main.ts",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    }
-  ]
-}
 ```
 
 8. push project ke repository github
