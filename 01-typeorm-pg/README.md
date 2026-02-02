@@ -44,7 +44,8 @@ touch .env
 
 ## Menjalankan Aplikasi
 
+pastikan postgresql aktif dan kredensial di .env benar
+
 ```bash
-# pastikan postgresql aktif dan kredensial di .env benar
 npm run start:dev
 ```
