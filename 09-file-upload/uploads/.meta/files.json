@@ -1,0 +1,24 @@
+[
+  {
+    "id": "049bde6a-9aeb-40cd-8652-ee4d5d564992",
+    "filename": "1770699014046-914032452.png",
+    "originalName": "ayah.png",
+    "mimetype": "image/png",
+    "size": 620335,
+    "folder": "gavi",
+    "url": "/uploads/gavi/1770699014046-914032452.png",
+    "description": "foto profil user",
+    "createdAt": 1770699014066
+  },
+  {
+    "id": "a11934da-7b47-474d-962c-1b842a0ee8eb",
+    "filename": "1770699267760-362020225.pdf",
+    "originalName": "HIN-DO-RR-260109.pdf",
+    "mimetype": "application/pdf",
+    "size": 85276,
+    "folder": "heinricov",
+    "url": "/uploads/heinricov/1770699267760-362020225.pdf",
+    "description": "file pdf",
+    "createdAt": 1770699267772
+  }
+]
